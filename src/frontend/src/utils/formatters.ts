@@ -1,4 +1,4 @@
-import { AssetType, Reputation } from "../backend";
+import type { AssetType, Reputation } from "../backend";
 
 // Asset type display names
 export const ASSET_LABELS: Record<AssetType, string> = {
@@ -59,7 +59,7 @@ export const REPUTATION_COLORS: Record<Reputation, string> = {
 };
 
 // Format BigInt to readable number
-export function formatBigInt(value: bigint, decimals: number = 2): string {
+export function formatBigInt(value: bigint, decimals = 2): string {
   const num = Number(value);
   return num.toLocaleString("en-US", {
     minimumFractionDigits: decimals,
@@ -105,7 +105,7 @@ export function getTrustScoreColor(trustScore: bigint): string {
 // Calculate total repayment amount
 export function calculateTotalRepayment(
   amount: bigint | number,
-  interestRate: number
+  interestRate: number,
 ): number {
   const principal = typeof amount === "bigint" ? Number(amount) : amount;
   return principal * (1 + interestRate / 100);
@@ -137,7 +137,7 @@ export function formatDuration(days: bigint): string {
 // Calculate remaining balance
 export function calculateRemainingBalance(
   totalRepayment: number,
-  repayments: Array<{ amount: number }>
+  repayments: Array<{ amount: number }>,
 ): number {
   const paid = repayments.reduce((sum, r) => sum + r.amount, 0);
   return Math.max(0, totalRepayment - paid);
@@ -146,7 +146,7 @@ export function calculateRemainingBalance(
 // Calculate repayment progress percentage
 export function calculateRepaymentProgress(
   totalRepayment: number,
-  repayments: Array<{ amount: number }>
+  repayments: Array<{ amount: number }>,
 ): number {
   const paid = repayments.reduce((sum, r) => sum + r.amount, 0);
   return Math.min(100, (paid / totalRepayment) * 100);
@@ -162,7 +162,9 @@ export function parseBigInt(value: string): bigint {
 }
 
 // Asset type options for selects
-export const ASSET_OPTIONS = Object.entries(ASSET_LABELS).map(([value, label]) => ({
-  value: value as AssetType,
-  label,
-}));
+export const ASSET_OPTIONS = Object.entries(ASSET_LABELS).map(
+  ([value, label]) => ({
+    value: value as AssetType,
+    label,
+  }),
+);

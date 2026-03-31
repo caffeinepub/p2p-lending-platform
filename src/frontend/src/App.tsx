@@ -1,15 +1,21 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RouterProvider, createRouter, createRoute, createRootRoute, Outlet } from "@tanstack/react-router";
-import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  Outlet,
+  RouterProvider,
+  createRootRoute,
+  createRoute,
+  createRouter,
+} from "@tanstack/react-router";
+import { ThemeProvider } from "next-themes";
 import CreateProfileModal from "./components/CreateProfileModal";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import CreateBorrowRequestPage from "./pages/CreateBorrowRequestPage";
+import CreateLoanListingPage from "./pages/CreateLoanListingPage";
+import DashboardPage from "./pages/DashboardPage";
 import HomePage from "./pages/HomePage";
 import MarketplacePage from "./pages/MarketplacePage";
-import CreateLoanListingPage from "./pages/CreateLoanListingPage";
-import CreateBorrowRequestPage from "./pages/CreateBorrowRequestPage";
-import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 
 const queryClient = new QueryClient({

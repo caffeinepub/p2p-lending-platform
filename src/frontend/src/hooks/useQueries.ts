@@ -1,15 +1,15 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useActor } from "./useActor";
+import type { Principal } from "@icp-sdk/core/principal";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
-  UserProfile,
-  LoanListing,
+  AssetType,
+  Badge,
   BorrowRequest,
   LoanAgreement,
-  Badge,
-  AssetType,
+  LoanListing,
+  UserProfile,
   UserRole,
 } from "../backend";
-import { Principal } from "@icp-sdk/core/principal";
+import { useActor } from "./useActor";
 
 // User Profile Queries
 export function useCallerUserProfile() {
@@ -20,7 +20,7 @@ export function useCallerUserProfile() {
       if (!actor) return null;
       try {
         return await actor.getCallerUserProfile();
-      } catch (error) {
+      } catch (_error) {
         // Profile doesn't exist yet
         return null;
       }
@@ -37,7 +37,7 @@ export function useUserProfile(principal?: Principal) {
       if (!actor || !principal) return null;
       try {
         return await actor.getUserProfile(principal);
-      } catch (error) {
+      } catch (_error) {
         return null;
       }
     },
@@ -131,7 +131,7 @@ export function useCreateLoanListing() {
         params.durationDays,
         params.collateralType,
         params.collateralAmount,
-        params.minTrustScore
+        params.minTrustScore,
       );
     },
     onSuccess: () => {
@@ -185,7 +185,7 @@ export function useCreateBorrowRequest() {
         params.offeredInterestRate,
         params.durationDays,
         params.collateralType,
-        params.collateralAmount
+        params.collateralAmount,
       );
     },
     onSuccess: () => {
@@ -203,7 +203,7 @@ export function useLoanAgreement(id?: bigint) {
       if (!actor || id === undefined) return null;
       try {
         return await actor.getLoanAgreement(id);
-      } catch (error) {
+      } catch (_error) {
         return null;
       }
     },
@@ -235,7 +235,7 @@ export function useCreateLoanAgreement() {
         params.interestRate,
         params.durationDays,
         params.collateralType,
-        params.collateralAmount
+        params.collateralAmount,
       );
     },
     onSuccess: () => {

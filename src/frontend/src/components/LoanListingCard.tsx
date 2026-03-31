@@ -1,20 +1,12 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Clock, Shield, TrendingUp } from "lucide-react";
-import type { LoanListing } from "../backend";
 import {
-  ASSET_SYMBOLS,
-  formatBigInt,
-  formatPercentage,
-  formatDuration,
-  getTrustScorePercentage,
-  getTrustScoreColor,
-} from "../utils/formatters";
-import { useUserProfile, useCreateLoanAgreement } from "../hooks/useQueries";
-import { useInternetIdentity } from "../hooks/useInternetIdentity";
-import { useState } from "react";
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -23,8 +15,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { toast } from "sonner";
+import { Progress } from "@/components/ui/progress";
+import { Clock, Shield, TrendingUp } from "lucide-react";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import type { LoanListing } from "../backend";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import { useCreateLoanAgreement, useUserProfile } from "../hooks/useQueries";
+import {
+  ASSET_SYMBOLS,
+  formatBigInt,
+  formatDuration,
+  formatPercentage,
+  getTrustScoreColor,
+  getTrustScorePercentage,
+} from "../utils/formatters";
 
 interface LoanListingCardProps {
   listing: LoanListing;
@@ -66,7 +72,8 @@ export default function LoanListingCard({ listing }: LoanListingCardProps) {
     }
   };
 
-  const isOwnListing = identity?.getPrincipal().toString() === listing.lender.toString();
+  const isOwnListing =
+    identity?.getPrincipal().toString() === listing.lender.toString();
 
   return (
     <>
@@ -74,7 +81,8 @@ export default function LoanListingCard({ listing }: LoanListingCardProps) {
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
             <CardTitle className="text-2xl font-display">
-              {formatBigInt(listing.amount, 0)} {ASSET_SYMBOLS[listing.assetType]}
+              {formatBigInt(listing.amount, 0)}{" "}
+              {ASSET_SYMBOLS[listing.assetType]}
             </CardTitle>
             <Badge variant="outline" className="text-success border-success">
               {formatPercentage(listing.interestRate)}
@@ -94,7 +102,8 @@ export default function LoanListingCard({ listing }: LoanListingCardProps) {
               Collateral Required
             </div>
             <div className="text-sm font-semibold">
-              {formatBigInt(listing.collateralAmount, 0)} {ASSET_SYMBOLS[listing.collateralType]}
+              {formatBigInt(listing.collateralAmount, 0)}{" "}
+              {ASSET_SYMBOLS[listing.collateralType]}
             </div>
           </div>
 
@@ -103,7 +112,9 @@ export default function LoanListingCard({ listing }: LoanListingCardProps) {
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Lender Trust</span>
-                <span className={`font-semibold ${getTrustScoreColor(lenderProfile.trustScore)}`}>
+                <span
+                  className={`font-semibold ${getTrustScoreColor(lenderProfile.trustScore)}`}
+                >
                   {Number(lenderProfile.trustScore)}/1000
                 </span>
               </div>
@@ -116,7 +127,9 @@ export default function LoanListingCard({ listing }: LoanListingCardProps) {
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Min Trust Required</span>
-              <span className="font-semibold">{Number(listing.minTrustScore)}/1000</span>
+              <span className="font-semibold">
+                {Number(listing.minTrustScore)}/1000
+              </span>
             </div>
             <Progress value={trustScorePercent} className="h-2" />
           </div>
@@ -156,28 +169,37 @@ export default function LoanListingCard({ listing }: LoanListingCardProps) {
             <DialogTitle>Confirm Loan Agreement</DialogTitle>
             <DialogDescription>
               You are about to borrow {formatBigInt(listing.amount, 0)}{" "}
-              {ASSET_SYMBOLS[listing.assetType]} at {formatPercentage(listing.interestRate)}{" "}
-              interest for {formatDuration(listing.durationDays)}.
+              {ASSET_SYMBOLS[listing.assetType]} at{" "}
+              {formatPercentage(listing.interestRate)} interest for{" "}
+              {formatDuration(listing.durationDays)}.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 py-4">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Collateral:</span>
               <span className="font-semibold">
-                {formatBigInt(listing.collateralAmount, 0)} {ASSET_SYMBOLS[listing.collateralType]}
+                {formatBigInt(listing.collateralAmount, 0)}{" "}
+                {ASSET_SYMBOLS[listing.collateralType]}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Duration:</span>
-              <span className="font-semibold">{formatDuration(listing.durationDays)}</span>
+              <span className="font-semibold">
+                {formatDuration(listing.durationDays)}
+              </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Interest Rate:</span>
-              <span className="font-semibold">{formatPercentage(listing.interestRate)}</span>
+              <span className="font-semibold">
+                {formatPercentage(listing.interestRate)}
+              </span>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowConfirmDialog(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleAccept} disabled={createAgreement.isPending}>

@@ -1,17 +1,29 @@
-import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCreateLoanListing } from "../hooks/useQueries";
-import { useInternetIdentity } from "../hooks/useInternetIdentity";
-import { ASSET_OPTIONS, parseBigInt } from "../utils/formatters";
-import { AssetType } from "../backend";
-import { toast } from "sonner";
-import { Loader2, ArrowLeft } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useNavigate } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { AssetType } from "../backend";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import { useCreateLoanListing } from "../hooks/useQueries";
+import { ASSET_OPTIONS, parseBigInt } from "../utils/formatters";
 
 export default function CreateLoanListingPage() {
   const navigate = useNavigate();
@@ -22,7 +34,9 @@ export default function CreateLoanListingPage() {
   const [amount, setAmount] = useState("");
   const [interestRate, setInterestRate] = useState("");
   const [durationDays, setDurationDays] = useState("");
-  const [collateralType, setCollateralType] = useState<AssetType>(AssetType.eth);
+  const [collateralType, setCollateralType] = useState<AssetType>(
+    AssetType.eth,
+  );
   const [collateralAmount, setCollateralAmount] = useState("");
   const [minTrustScore, setMinTrustScore] = useState("500");
 
@@ -35,18 +49,32 @@ export default function CreateLoanListingPage() {
     }
 
     // Validation
-    if (!assetType || !amount || !interestRate || !durationDays || !collateralType || !collateralAmount) {
+    if (
+      !assetType ||
+      !amount ||
+      !interestRate ||
+      !durationDays ||
+      !collateralType ||
+      !collateralAmount
+    ) {
       toast.error("Please fill in all required fields");
       return;
     }
 
-    const amountNum = parseFloat(amount);
-    const interestRateNum = parseFloat(interestRate);
-    const durationNum = parseInt(durationDays);
-    const collateralNum = parseFloat(collateralAmount);
-    const trustScoreNum = parseInt(minTrustScore);
+    const amountNum = Number.parseFloat(amount);
+    const interestRateNum = Number.parseFloat(interestRate);
+    const durationNum = Number.parseInt(durationDays);
+    const collateralNum = Number.parseFloat(collateralAmount);
+    const trustScoreNum = Number.parseInt(minTrustScore);
 
-    if (amountNum <= 0 || interestRateNum < 0 || durationNum <= 0 || collateralNum <= 0 || trustScoreNum < 0 || trustScoreNum > 1000) {
+    if (
+      amountNum <= 0 ||
+      interestRateNum < 0 ||
+      durationNum <= 0 ||
+      collateralNum <= 0 ||
+      trustScoreNum < 0 ||
+      trustScoreNum > 1000
+    ) {
       toast.error("Please enter valid positive values");
       return;
     }
@@ -76,7 +104,9 @@ export default function CreateLoanListingPage() {
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
             <CardTitle>Login Required</CardTitle>
-            <CardDescription>You must be logged in to create a loan listing</CardDescription>
+            <CardDescription>
+              You must be logged in to create a loan listing
+            </CardDescription>
           </CardHeader>
         </Card>
       </div>
@@ -96,9 +126,12 @@ export default function CreateLoanListingPage() {
 
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-3xl font-display">Create Loan Listing</CardTitle>
+          <CardTitle className="text-3xl font-display">
+            Create Loan Listing
+          </CardTitle>
           <CardDescription>
-            Offer a loan to borrowers. Set your terms, interest rate, and collateral requirements.
+            Offer a loan to borrowers. Set your terms, interest rate, and
+            collateral requirements.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -106,7 +139,10 @@ export default function CreateLoanListingPage() {
             {/* Asset Type */}
             <div className="space-y-2">
               <Label htmlFor="assetType">Asset Type *</Label>
-              <Select value={assetType} onValueChange={(value) => setAssetType(value as AssetType)}>
+              <Select
+                value={assetType}
+                onValueChange={(value) => setAssetType(value as AssetType)}
+              >
                 <SelectTrigger id="assetType">
                   <SelectValue />
                 </SelectTrigger>
@@ -146,7 +182,9 @@ export default function CreateLoanListingPage() {
                 onChange={(e) => setInterestRate(e.target.value)}
                 required
               />
-              <p className="text-xs text-muted-foreground">Annual interest rate</p>
+              <p className="text-xs text-muted-foreground">
+                Annual interest rate
+              </p>
             </div>
 
             {/* Duration */}
@@ -198,7 +236,9 @@ export default function CreateLoanListingPage() {
 
             {/* Min Trust Score */}
             <div className="space-y-2">
-              <Label htmlFor="minTrustScore">Minimum Trust Score (0-1000) *</Label>
+              <Label htmlFor="minTrustScore">
+                Minimum Trust Score (0-1000) *
+              </Label>
               <Input
                 id="minTrustScore"
                 type="number"
@@ -210,7 +250,8 @@ export default function CreateLoanListingPage() {
                 required
               />
               <p className="text-xs text-muted-foreground">
-                Only borrowers with this trust score or higher can accept your offer
+                Only borrowers with this trust score or higher can accept your
+                offer
               </p>
             </div>
 
@@ -223,7 +264,11 @@ export default function CreateLoanListingPage() {
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={createListing.isPending} className="flex-1">
+              <Button
+                type="submit"
+                disabled={createListing.isPending}
+                className="flex-1"
+              >
                 {createListing.isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

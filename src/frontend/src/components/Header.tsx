@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -6,12 +5,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Moon, Sun, User, LogOut } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Link } from "@tanstack/react-router";
+import { LogOut, Menu, Moon, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useState } from "react";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { useCallerUserProfile } from "../hooks/useQueries";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
@@ -88,7 +88,10 @@ export default function Header() {
                     Profile
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => clear()} className="cursor-pointer">
+                <DropdownMenuItem
+                  onClick={() => clear()}
+                  className="cursor-pointer"
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </DropdownMenuItem>

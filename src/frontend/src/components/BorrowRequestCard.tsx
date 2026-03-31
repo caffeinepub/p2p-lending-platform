@@ -1,20 +1,12 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Clock, Shield, HandshakeIcon } from "lucide-react";
-import type { BorrowRequest } from "../backend";
 import {
-  ASSET_SYMBOLS,
-  formatBigInt,
-  formatPercentage,
-  formatDuration,
-  getTrustScorePercentage,
-  getTrustScoreColor,
-} from "../utils/formatters";
-import { useUserProfile, useCreateLoanAgreement } from "../hooks/useQueries";
-import { useInternetIdentity } from "../hooks/useInternetIdentity";
-import { useState } from "react";
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -23,8 +15,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { toast } from "sonner";
+import { Progress } from "@/components/ui/progress";
+import { Clock, HandshakeIcon, Shield } from "lucide-react";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import type { BorrowRequest } from "../backend";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import { useCreateLoanAgreement, useUserProfile } from "../hooks/useQueries";
+import {
+  ASSET_SYMBOLS,
+  formatBigInt,
+  formatDuration,
+  formatPercentage,
+  getTrustScoreColor,
+  getTrustScorePercentage,
+} from "../utils/formatters";
 
 interface BorrowRequestCardProps {
   request: BorrowRequest;
@@ -65,7 +71,8 @@ export default function BorrowRequestCard({ request }: BorrowRequestCardProps) {
     }
   };
 
-  const isOwnRequest = identity?.getPrincipal().toString() === request.borrower.toString();
+  const isOwnRequest =
+    identity?.getPrincipal().toString() === request.borrower.toString();
 
   return (
     <>
@@ -73,7 +80,8 @@ export default function BorrowRequestCard({ request }: BorrowRequestCardProps) {
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-2">
             <CardTitle className="text-2xl font-display">
-              {formatBigInt(request.amount, 0)} {ASSET_SYMBOLS[request.assetType]}
+              {formatBigInt(request.amount, 0)}{" "}
+              {ASSET_SYMBOLS[request.assetType]}
             </CardTitle>
             <Badge variant="outline" className="text-warning border-warning">
               {formatPercentage(request.offeredInterestRate)}
@@ -93,7 +101,8 @@ export default function BorrowRequestCard({ request }: BorrowRequestCardProps) {
               Collateral Offered
             </div>
             <div className="text-sm font-semibold">
-              {formatBigInt(request.collateralAmount, 0)} {ASSET_SYMBOLS[request.collateralType]}
+              {formatBigInt(request.collateralAmount, 0)}{" "}
+              {ASSET_SYMBOLS[request.collateralType]}
             </div>
           </div>
 
@@ -118,11 +127,15 @@ export default function BorrowRequestCard({ request }: BorrowRequestCardProps) {
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="rounded bg-muted/30 p-2">
                 <div className="text-muted-foreground">Loans Taken</div>
-                <div className="font-semibold">{Number(borrowerProfile.loansTaken)}</div>
+                <div className="font-semibold">
+                  {Number(borrowerProfile.loansTaken)}
+                </div>
               </div>
               <div className="rounded bg-muted/30 p-2">
                 <div className="text-muted-foreground">Completed</div>
-                <div className="font-semibold">{Number(borrowerProfile.successfulCompletions)}</div>
+                <div className="font-semibold">
+                  {Number(borrowerProfile.successfulCompletions)}
+                </div>
               </div>
             </div>
           )}
@@ -162,28 +175,37 @@ export default function BorrowRequestCard({ request }: BorrowRequestCardProps) {
             <DialogTitle>Confirm Loan Agreement</DialogTitle>
             <DialogDescription>
               You are about to lend {formatBigInt(request.amount, 0)}{" "}
-              {ASSET_SYMBOLS[request.assetType]} at {formatPercentage(request.offeredInterestRate)}{" "}
-              interest for {formatDuration(request.durationDays)}.
+              {ASSET_SYMBOLS[request.assetType]} at{" "}
+              {formatPercentage(request.offeredInterestRate)} interest for{" "}
+              {formatDuration(request.durationDays)}.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 py-4">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Collateral:</span>
               <span className="font-semibold">
-                {formatBigInt(request.collateralAmount, 0)} {ASSET_SYMBOLS[request.collateralType]}
+                {formatBigInt(request.collateralAmount, 0)}{" "}
+                {ASSET_SYMBOLS[request.collateralType]}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Duration:</span>
-              <span className="font-semibold">{formatDuration(request.durationDays)}</span>
+              <span className="font-semibold">
+                {formatDuration(request.durationDays)}
+              </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Interest Rate:</span>
-              <span className="font-semibold">{formatPercentage(request.offeredInterestRate)}</span>
+              <span className="font-semibold">
+                {formatPercentage(request.offeredInterestRate)}
+              </span>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowConfirmDialog(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleMatch} disabled={createAgreement.isPending}>

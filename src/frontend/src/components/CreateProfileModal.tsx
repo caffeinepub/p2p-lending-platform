@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,13 +6,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { useCallerUserProfile, useCreateProfile } from "../hooks/useQueries";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
 
 export default function CreateProfileModal() {
   const { identity, loginStatus } = useInternetIdentity();

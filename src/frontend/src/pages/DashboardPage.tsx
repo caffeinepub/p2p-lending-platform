@@ -1,26 +1,30 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import {
+  useBorrowRequestsByBorrower,
   useCallerUserProfile,
   useLoanListingsByLender,
-  useBorrowRequestsByBorrower,
 } from "../hooks/useQueries";
-import { Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { formatBigInt, ASSET_SYMBOLS, formatDuration, formatPercentage, formatTimestamp } from "../utils/formatters";
+import {
+  ASSET_SYMBOLS,
+  formatBigInt,
+  formatDuration,
+  formatPercentage,
+  formatTimestamp,
+} from "../utils/formatters";
 
 export default function DashboardPage() {
   const { identity } = useInternetIdentity();
   const { data: profile, isLoading: profileLoading } = useCallerUserProfile();
-  const { data: myListings, isLoading: listingsLoading } = useLoanListingsByLender(
-    identity?.getPrincipal()
-  );
-  const { data: myRequests, isLoading: requestsLoading } = useBorrowRequestsByBorrower(
-    identity?.getPrincipal()
-  );
+  const { data: myListings, isLoading: listingsLoading } =
+    useLoanListingsByLender(identity?.getPrincipal());
+  const { data: myRequests, isLoading: requestsLoading } =
+    useBorrowRequestsByBorrower(identity?.getPrincipal());
 
   if (!identity) {
     return (
@@ -49,7 +53,9 @@ export default function DashboardPage() {
   return (
     <div className="container py-8 lg:py-12">
       <div className="mb-8">
-        <h1 className="text-4xl lg:text-5xl font-display font-bold mb-3">My Dashboard</h1>
+        <h1 className="text-4xl lg:text-5xl font-display font-bold mb-3">
+          My Dashboard
+        </h1>
         <p className="text-lg text-muted-foreground">
           Manage your loans, listings, and requests
         </p>
@@ -64,7 +70,9 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-display font-bold text-primary">{activeLoans}</div>
+            <div className="text-3xl font-display font-bold text-primary">
+              {activeLoans}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -74,7 +82,9 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-display font-bold text-success">{totalLent}</div>
+            <div className="text-3xl font-display font-bold text-success">
+              {totalLent}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -84,7 +94,9 @@ export default function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-display font-bold text-accent">{totalBorrowed}</div>
+            <div className="text-3xl font-display font-bold text-accent">
+              {totalBorrowed}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -129,7 +141,8 @@ export default function DashboardPage() {
                     <div className="flex items-start justify-between">
                       <div>
                         <CardTitle className="text-2xl font-display">
-                          {formatBigInt(listing.amount, 0)} {ASSET_SYMBOLS[listing.assetType]}
+                          {formatBigInt(listing.amount, 0)}{" "}
+                          {ASSET_SYMBOLS[listing.assetType]}
                         </CardTitle>
                         <p className="text-sm text-muted-foreground mt-1">
                           Created {formatTimestamp(listing.createdAt)}
@@ -140,8 +153,8 @@ export default function DashboardPage() {
                           listing.status === "available"
                             ? "default"
                             : listing.status === "matched"
-                            ? "secondary"
-                            : "outline"
+                              ? "secondary"
+                              : "outline"
                         }
                       >
                         {listing.status}
@@ -151,17 +164,26 @@ export default function DashboardPage() {
                   <CardContent>
                     <div className="grid sm:grid-cols-3 gap-4 text-sm">
                       <div>
-                        <span className="text-muted-foreground">Interest Rate:</span>
-                        <div className="font-semibold">{formatPercentage(listing.interestRate)}</div>
+                        <span className="text-muted-foreground">
+                          Interest Rate:
+                        </span>
+                        <div className="font-semibold">
+                          {formatPercentage(listing.interestRate)}
+                        </div>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Duration:</span>
-                        <div className="font-semibold">{formatDuration(listing.durationDays)}</div>
+                        <div className="font-semibold">
+                          {formatDuration(listing.durationDays)}
+                        </div>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Collateral:</span>
+                        <span className="text-muted-foreground">
+                          Collateral:
+                        </span>
                         <div className="font-semibold">
-                          {formatBigInt(listing.collateralAmount, 0)} {ASSET_SYMBOLS[listing.collateralType]}
+                          {formatBigInt(listing.collateralAmount, 0)}{" "}
+                          {ASSET_SYMBOLS[listing.collateralType]}
                         </div>
                       </div>
                     </div>
@@ -196,7 +218,8 @@ export default function DashboardPage() {
                     <div className="flex items-start justify-between">
                       <div>
                         <CardTitle className="text-2xl font-display">
-                          {formatBigInt(request.amount, 0)} {ASSET_SYMBOLS[request.assetType]}
+                          {formatBigInt(request.amount, 0)}{" "}
+                          {ASSET_SYMBOLS[request.assetType]}
                         </CardTitle>
                         <p className="text-sm text-muted-foreground mt-1">
                           Created {formatTimestamp(request.createdAt)}
@@ -207,8 +230,8 @@ export default function DashboardPage() {
                           request.status === "open"
                             ? "default"
                             : request.status === "matched"
-                            ? "secondary"
-                            : "outline"
+                              ? "secondary"
+                              : "outline"
                         }
                       >
                         {request.status}
@@ -218,17 +241,23 @@ export default function DashboardPage() {
                   <CardContent>
                     <div className="grid sm:grid-cols-3 gap-4 text-sm">
                       <div>
-                        <span className="text-muted-foreground">Interest Rate:</span>
+                        <span className="text-muted-foreground">
+                          Interest Rate:
+                        </span>
                         <div className="font-semibold">
                           {formatPercentage(request.offeredInterestRate)}
                         </div>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Duration:</span>
-                        <div className="font-semibold">{formatDuration(request.durationDays)}</div>
+                        <div className="font-semibold">
+                          {formatDuration(request.durationDays)}
+                        </div>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Collateral:</span>
+                        <span className="text-muted-foreground">
+                          Collateral:
+                        </span>
                         <div className="font-semibold">
                           {formatBigInt(request.collateralAmount, 0)}{" "}
                           {ASSET_SYMBOLS[request.collateralType]}

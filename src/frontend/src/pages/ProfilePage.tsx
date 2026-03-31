@@ -1,22 +1,30 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Loader2, Award, TrendingUp, HandshakeIcon, CheckCircle2 } from "lucide-react";
-import { useInternetIdentity } from "../hooks/useInternetIdentity";
-import { useCallerUserProfile, useBadges } from "../hooks/useQueries";
 import {
-  getTrustScorePercentage,
-  getTrustScoreColor,
-  REPUTATION_LABELS,
+  Award,
+  CheckCircle2,
+  HandshakeIcon,
+  Loader2,
+  TrendingUp,
+} from "lucide-react";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import { useBadges, useCallerUserProfile } from "../hooks/useQueries";
+import {
   REPUTATION_COLORS,
-  truncatePrincipal,
+  REPUTATION_LABELS,
   formatTimestamp,
+  getTrustScoreColor,
+  getTrustScorePercentage,
+  truncatePrincipal,
 } from "../utils/formatters";
 
 export default function ProfilePage() {
   const { identity } = useInternetIdentity();
   const { data: profile, isLoading: profileLoading } = useCallerUserProfile();
-  const { data: badges, isLoading: badgesLoading } = useBadges(identity?.getPrincipal());
+  const { data: badges, isLoading: badgesLoading } = useBadges(
+    identity?.getPrincipal(),
+  );
 
   if (!identity) {
     return (
@@ -61,12 +69,16 @@ export default function ProfilePage() {
           <CardHeader>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <CardTitle className="text-3xl font-display mb-2">{profile.name}</CardTitle>
+                <CardTitle className="text-3xl font-display mb-2">
+                  {profile.name}
+                </CardTitle>
                 <p className="text-sm text-muted-foreground font-mono">
                   {truncatePrincipal(profile.principal.toString())}
                 </p>
               </div>
-              <Badge className={`text-base px-4 py-2 ${REPUTATION_COLORS[profile.reputation]}`}>
+              <Badge
+                className={`text-base px-4 py-2 ${REPUTATION_COLORS[profile.reputation]}`}
+              >
                 {REPUTATION_LABELS[profile.reputation]}
               </Badge>
             </div>
@@ -76,7 +88,9 @@ export default function ProfilePage() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">Trust Score</h3>
-                <span className={`text-3xl font-display font-bold ${getTrustScoreColor(profile.trustScore)}`}>
+                <span
+                  className={`text-3xl font-display font-bold ${getTrustScoreColor(profile.trustScore)}`}
+                >
                   {trustScore}/1000
                 </span>
               </div>
@@ -85,10 +99,10 @@ export default function ProfilePage() {
                 {trustScore < 400
                   ? "Build trust by completing loans successfully"
                   : trustScore < 700
-                  ? "Good standing - keep building your reputation"
-                  : trustScore < 900
-                  ? "Excellent reputation - unlock premium features"
-                  : "Outstanding trust score - you're a top-tier user"}
+                    ? "Good standing - keep building your reputation"
+                    : trustScore < 900
+                      ? "Excellent reputation - unlock premium features"
+                      : "Outstanding trust score - you're a top-tier user"}
               </p>
             </div>
 
@@ -99,8 +113,12 @@ export default function ProfilePage() {
                   <TrendingUp className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <div className="text-2xl font-display font-bold">{Number(profile.loansGiven)}</div>
-                  <div className="text-xs text-muted-foreground">Loans Given</div>
+                  <div className="text-2xl font-display font-bold">
+                    {Number(profile.loansGiven)}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Loans Given
+                  </div>
                 </div>
               </div>
 
@@ -109,8 +127,12 @@ export default function ProfilePage() {
                   <HandshakeIcon className="h-5 w-5 text-accent" />
                 </div>
                 <div>
-                  <div className="text-2xl font-display font-bold">{Number(profile.loansTaken)}</div>
-                  <div className="text-xs text-muted-foreground">Loans Taken</div>
+                  <div className="text-2xl font-display font-bold">
+                    {Number(profile.loansTaken)}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Loans Taken
+                  </div>
                 </div>
               </div>
 
@@ -131,8 +153,12 @@ export default function ProfilePage() {
                   <Award className="h-5 w-5 text-warning" />
                 </div>
                 <div>
-                  <div className="text-2xl font-display font-bold">{Number(profile.activeLoans)}</div>
-                  <div className="text-xs text-muted-foreground">Active Loans</div>
+                  <div className="text-2xl font-display font-bold">
+                    {Number(profile.activeLoans)}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Active Loans
+                  </div>
                 </div>
               </div>
             </div>
@@ -156,21 +182,27 @@ export default function ProfilePage() {
               <div className="text-center py-8 text-muted-foreground">
                 <Award className="h-12 w-12 mx-auto mb-3 opacity-50" />
                 <p>No badges earned yet</p>
-                <p className="text-sm mt-1">Complete loans to unlock achievements</p>
+                <p className="text-sm mt-1">
+                  Complete loans to unlock achievements
+                </p>
               </div>
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {badges.map((badge, index) => (
+                {badges.map((badge) => (
                   <div
-                    key={index}
+                    key={badge.name}
                     className="flex items-start gap-3 p-4 rounded-lg border border-border bg-card hover:bg-accent/5 transition-colors"
                   >
                     <div className="h-12 w-12 rounded-full bg-gradient-to-br from-accent to-primary flex items-center justify-center shrink-0">
                       <Award className="h-6 w-6 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-sm mb-1">{badge.name}</h4>
-                      <p className="text-xs text-muted-foreground mb-2">{badge.description}</p>
+                      <h4 className="font-semibold text-sm mb-1">
+                        {badge.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground mb-2">
+                        {badge.description}
+                      </p>
                       <p className="text-xs text-muted-foreground">
                         Earned {formatTimestamp(badge.earnedAt)}
                       </p>
@@ -190,7 +222,9 @@ export default function ProfilePage() {
           <CardContent className="space-y-3">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Principal ID:</span>
-              <span className="font-mono text-xs">{profile.principal.toString()}</span>
+              <span className="font-mono text-xs">
+                {profile.principal.toString()}
+              </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Member Since:</span>
